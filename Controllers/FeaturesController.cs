@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SmartParkingSystem.DTOs.Feature;
+
 using SmartParkingSystem.Interfaces.Services;
 
 namespace SmartParkingSystem.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class FeaturesController : ControllerBase
     {
         private readonly IFeatureService _featureService;
@@ -19,6 +19,7 @@ namespace SmartParkingSystem.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -33,6 +34,7 @@ namespace SmartParkingSystem.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetById(int id)
         {
             try
@@ -50,8 +52,53 @@ namespace SmartParkingSystem.Controllers
             }
         }
 
+        //[HttpPost]
+        //public async Task<IActionResult> Create([FromBody] CreateFeatureDto dto)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(new { success = false, error = "Invalid input." });
+
+        //    try
+        //    {
+        //        var created = await _featureService.CreateAsync(dto);
+        //        return CreatedAtAction(nameof(GetById), new { id = created.Id }, new { success = true, data = created });
+        //    }
+        //    catch (InvalidOperationException ex)
+        //    {
+        //        return Conflict(new { success = false, error = ex.Message });
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(500, new { success = false, error = "Failed to create feature." });
+        //    }
+        //}
+
+        //[HttpPut("{id:int}")]
+        //public async Task<IActionResult> Update(int id, [FromBody] UpdateFeatureDto dto)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(new { success = false, error = "Invalid input." });
+
+        //    try
+        //    {
+        //        var updated = await _featureService.UpdateAsync(id, dto);
+        //        return Ok(new { success = true, data = updated });
+        //    }
+        //    catch (ArgumentException ex)
+        //    {
+        //        return NotFound(new { success = false, error = ex.Message });
+        //    }
+        //    catch (InvalidOperationException ex)
+        //    {
+        //        return Conflict(new { success = false, error = ex.Message });
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(500, new { success = false, error = "Failed to update feature." });
+        //    }
+        //}
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateFeatureDto dto)
+        public async Task<IActionResult> Create([FromForm] CreateFeatureDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new { success = false, error = "Invalid input." });
@@ -72,7 +119,7 @@ namespace SmartParkingSystem.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateFeatureDto dto)
+        public async Task<IActionResult> Update(int id, [FromForm] UpdateFeatureDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new { success = false, error = "Invalid input." });
@@ -96,6 +143,7 @@ namespace SmartParkingSystem.Controllers
             }
         }
 
+
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -113,6 +161,7 @@ namespace SmartParkingSystem.Controllers
         }
 
         [HttpGet("active")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetActive()
         {
             try

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -121,16 +121,21 @@ builder.Services.AddHostedService<NotificationBackgroundService>();
 var app = builder.Build();
 
 // Middleware pipeline
-if (app.Environment.IsDevelopment())
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI(c =>
+//    {
+//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Smart Parking System API v1");
+//        c.DocumentTitle = "Smart Parking API Docs";
+//    });
+//}
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Smart Parking System API v1");
-        c.DocumentTitle = "Smart Parking API Docs";
-    });
-}
-
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Smart Parking System API v1");
+    c.DocumentTitle = "Smart Parking API Docs";
+});
 app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");

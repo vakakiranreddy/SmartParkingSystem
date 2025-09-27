@@ -55,8 +55,45 @@ namespace SmartParkingSystem.Controllers
             }
         }
 
+        //[HttpPost]
+        //public async Task<IActionResult> Create([FromBody] CreateVehicleDto createDto)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(new { success = false, error = "Invalid input data." });
+
+        //    try
+        //    {
+        //        if (!Enum.IsDefined(typeof(VehicleType), createDto.VehicleType))
+        //            return BadRequest(new { success = false, error = "Invalid vehicle type." });
+
+        //        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        //        var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+
+        //        // Default: current user is owner
+        //        var ownerId = userId;
+
+        //        // If Admin/Guard, allow overriding (optional)
+        //        if (userRole == "Admin" || userRole == "Guard")
+        //        {
+        //            // you could allow them to assign OwnerId if needed
+        //            ownerId = userId; // keep as self for now
+        //        }
+
+        //        var vehicle = await _vehicleService.CreateAsync(createDto, ownerId);
+        //        return Ok(new { success = true, data = vehicle });
+        //    }
+        //    catch (InvalidOperationException ex)
+        //    {
+        //        return Conflict(new { success = false, error = ex.Message });
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(500, new { success = false, error = "An error occurred while creating the vehicle." });
+        //    }
+        //}
+
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateVehicleDto createDto)
+        public async Task<IActionResult> Create([FromForm] CreateVehicleDto createDto, IFormFile vehicleImage)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new { success = false, error = "Invalid input data." });
@@ -66,20 +103,27 @@ namespace SmartParkingSystem.Controllers
                 if (!Enum.IsDefined(typeof(VehicleType), createDto.VehicleType))
                     return BadRequest(new { success = false, error = "Invalid vehicle type." });
 
+                byte[] imageBytes = null;
+                if (vehicleImage != null)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await vehicleImage.CopyToAsync(memoryStream);
+                        imageBytes = memoryStream.ToArray();
+                    }
+                }
+
                 var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
 
-                // Default: current user is owner
                 var ownerId = userId;
 
-                // If Admin/Guard, allow overriding (optional)
                 if (userRole == "Admin" || userRole == "Guard")
                 {
-                    // you could allow them to assign OwnerId if needed
-                    ownerId = userId; // keep as self for now
+                    ownerId = userId;
                 }
 
-                var vehicle = await _vehicleService.CreateAsync(createDto, ownerId);
+                var vehicle = await _vehicleService.CreateAsync(createDto, ownerId, imageBytes);
                 return Ok(new { success = true, data = vehicle });
             }
             catch (InvalidOperationException ex)
@@ -93,29 +137,76 @@ namespace SmartParkingSystem.Controllers
         }
 
 
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> Update(int id, [FromBody] UpdateVehicleDto updateDto)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(new { success = false, error = "Invalid input data." });
+
+        //    try
+        //    {
+        //        // Validate VehicleType
+        //        if (!Enum.IsDefined(typeof(VehicleType), updateDto.VehicleType))
+        //            return BadRequest(new { success = false, error = "Invalid vehicle type." });
+
+        //        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        //        var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+        //        var vehicle = await _vehicleService.GetByIdAsync(id);
+
+        //        // Only Admin and Guard can update any vehicle; User can only update their own
+        //        if (userRole != "Admin" && userRole != "Guard" && vehicle.OwnerId != userId)
+        //        {
+        //            return Unauthorized(new { success = false, error = "You are not authorized to update this vehicle." });
+        //        }
+
+        //        var updatedVehicle = await _vehicleService.UpdateAsync(id, updateDto);
+        //        return Ok(new { success = true, data = updatedVehicle });
+        //    }
+        //    catch (ArgumentException ex)
+        //    {
+        //        return BadRequest(new { success = false, error = ex.Message });
+        //    }
+        //    catch (InvalidOperationException ex)
+        //    {
+        //        return Conflict(new { success = false, error = ex.Message });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new { success = false, error = "An error occurred while updating the vehicle." });
+        //    }
+        //}
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateVehicleDto updateDto)
+        public async Task<IActionResult> Update(int id, [FromForm] UpdateVehicleDto updateDto, IFormFile vehicleImage)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new { success = false, error = "Invalid input data." });
 
             try
             {
-                // Validate VehicleType
                 if (!Enum.IsDefined(typeof(VehicleType), updateDto.VehicleType))
                     return BadRequest(new { success = false, error = "Invalid vehicle type." });
+
+                byte[] imageBytes = null;
+                if (vehicleImage != null)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await vehicleImage.CopyToAsync(memoryStream);
+                        imageBytes = memoryStream.ToArray();
+                    }
+                }
 
                 var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
                 var vehicle = await _vehicleService.GetByIdAsync(id);
 
-                // Only Admin and Guard can update any vehicle; User can only update their own
                 if (userRole != "Admin" && userRole != "Guard" && vehicle.OwnerId != userId)
                 {
                     return Unauthorized(new { success = false, error = "You are not authorized to update this vehicle." });
                 }
 
-                var updatedVehicle = await _vehicleService.UpdateAsync(id, updateDto);
+                var updatedVehicle = await _vehicleService.UpdateAsync(id, updateDto, imageBytes);
                 return Ok(new { success = true, data = updatedVehicle });
             }
             catch (ArgumentException ex)

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartParkingSystem.DTOs.User;
 using SmartParkingSystem.Interfaces.Services;
+using System.Linq;
 using System.Security.Claims;
 
 namespace SmartParkingSystem.Controllers
@@ -18,13 +19,41 @@ namespace SmartParkingSystem.Controllers
             _authService = authService;
         }
 
+        //[HttpPost("login")]
+        //public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        //{
+        //    try
+        //    {
+        //        var token = await _authService.LoginAsync(loginDto);
+        //        return Ok(new { success = true, token = token });
+        //    }
+        //    catch (UnauthorizedAccessException ex)
+        //    {
+        //        return Unauthorized(new { success = false, message = ex.Message });
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return BadRequest(new { success = false, message = "Login failed" });
+        //    }
+        //}
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(new { success = false, message = "Invalid input." });
+
             try
             {
-                var token = await _authService.LoginAsync(loginDto);
-                return Ok(new { success = true, token = token });
+                // unpack the tuple returned by LoginAsync
+                var (token, user) = await _authService.LoginAsync(loginDto);
+
+                return Ok(new
+                {
+                    success = true,
+                    token,
+                    user
+                });
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -32,9 +61,10 @@ namespace SmartParkingSystem.Controllers
             }
             catch (Exception)
             {
-                return BadRequest(new { success = false, message = "Login failed" });
+                return BadRequest(new { success = false, message = "Login failed." });
             }
         }
+
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)

@@ -10,7 +10,7 @@ namespace SmartParkingSystem.DTOs.Vehicle
         public string Brand { get; set; }
         public string Model { get; set; }
         public string Color { get; set; }
-        public string VehicleImageUrl { get; set; }
+        public string VehicleImageBase64 { get; set; }
         public int OwnerId { get; set; }
         public string OwnerName { get; set; }
         public bool IsActive { get; set; }

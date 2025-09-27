@@ -8,7 +8,7 @@ namespace SmartParkingSystem.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class SlotFeaturesController : ControllerBase
     {
         private readonly ISlotFeatureService _slotFeatureService;
@@ -65,6 +65,7 @@ namespace SmartParkingSystem.Controllers
         }
 
         [HttpGet("slot/{slotId:int}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetSlotFeatures(int slotId)
         {
             try
@@ -83,6 +84,7 @@ namespace SmartParkingSystem.Controllers
         }
 
         [HttpGet("feature/{featureId:int}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> GetFeatureAssignments(int featureId)
         {
             try

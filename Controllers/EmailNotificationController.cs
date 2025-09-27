@@ -43,6 +43,28 @@ namespace SmartParkingSystem.Controllers
         /// <summary>
         /// Get all notifications for a specific user
         /// </summary>
+        //[HttpGet("user/{userId}")]
+        //public async Task<ActionResult<IEnumerable<EmailNotificationResponseDto>>> GetUserNotifications(int userId)
+        //{
+        //    try
+        //    {
+        //        // Users can only view their own notifications, unless they're admin/guard
+        //        var currentUserRole = User.FindFirst("role")?.Value;
+        //        var currentUserId = int.Parse(User.FindFirst("userId")?.Value ?? "0");
+
+        //        if (currentUserRole != "Admin" && currentUserRole != "Guard" && currentUserId != userId)
+        //        {
+        //            return Forbid("You can only view your own notifications.");
+        //        }
+
+        //        var notifications = await _emailService.GetUserNotificationsAsync(userId);
+        //        return Ok(notifications);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new { message = "An error occurred while retrieving notifications.", details = ex.Message });
+        //    }
+        //}
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<EmailNotificationResponseDto>>> GetUserNotifications(int userId)
         {
@@ -50,11 +72,12 @@ namespace SmartParkingSystem.Controllers
             {
                 // Users can only view their own notifications, unless they're admin/guard
                 var currentUserRole = User.FindFirst("role")?.Value;
-                var currentUserId = int.Parse(User.FindFirst("userId")?.Value ?? "0");
+                var currentUserId = int.Parse(User.FindFirst("nameid")?.Value ?? "0"); // <-- FIXED
 
                 if (currentUserRole != "Admin" && currentUserRole != "Guard" && currentUserId != userId)
                 {
-                    return Forbid("You can only view your own notifications.");
+                    return StatusCode(StatusCodes.Status403Forbidden,
+                        new { message = "You can only view your own notifications." });
                 }
 
                 var notifications = await _emailService.GetUserNotificationsAsync(userId);
@@ -65,6 +88,7 @@ namespace SmartParkingSystem.Controllers
                 return StatusCode(500, new { message = "An error occurred while retrieving notifications.", details = ex.Message });
             }
         }
+
 
         /// <summary>
         /// Process all pending emails (Admin/Guard only)

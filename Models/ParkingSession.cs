@@ -18,7 +18,11 @@ namespace SmartParkingSystem.Models
 
         [Required]
         public int UserId { get; set; }
-        public bool ReminderSent { get; set; } = false;
+        //public bool ReminderSent { get; set; } = false;
+        public bool EntryReminderSent { get; set; } = false;
+        public bool ExitReminderSent { get; set; } = false;
+        public bool OverdueReminderSent { get; set; } = false;
+
 
         public DateTime? ReservedTime { get; set; }
         public DateTime EntryTime { get; set; } 

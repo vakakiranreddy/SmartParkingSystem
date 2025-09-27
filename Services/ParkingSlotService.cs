@@ -59,11 +59,41 @@ namespace SmartParkingSystem.Services
             }
         }
 
+        //public async Task<ParkingSlotResponseDto> CreateAsync(CreateParkingSlotDto createDto)
+        //{
+        //    try
+        //    {
+        //        // Check if slot number already exists
+        //        if (await _parkingSlotRepository.SlotNumberExistsAsync(createDto.SlotNumber))
+        //            throw new InvalidOperationException($"Slot number '{createDto.SlotNumber}' already exists.");
+
+        //        var slot = new ParkingSlot
+        //        {
+        //            SlotNumber = createDto.SlotNumber,
+        //            Floor = createDto.Floor,
+        //            Section = createDto.Section,
+        //            SlotImage = createDto.SlotImage,
+        //            IsOccupied = false,
+        //            IsActive = true
+        //        };
+
+        //        var createdSlot = await _parkingSlotRepository.AddAsync(slot);
+        //        return await MapToParkingSlotResponseDto(createdSlot);
+        //    }
+        //    catch (InvalidOperationException)
+        //    {
+        //        throw;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("Error creating parking slot.", ex);
+        //    }
+        //}
+
         public async Task<ParkingSlotResponseDto> CreateAsync(CreateParkingSlotDto createDto)
         {
             try
             {
-                // Check if slot number already exists
                 if (await _parkingSlotRepository.SlotNumberExistsAsync(createDto.SlotNumber))
                     throw new InvalidOperationException($"Slot number '{createDto.SlotNumber}' already exists.");
 
@@ -72,7 +102,7 @@ namespace SmartParkingSystem.Services
                     SlotNumber = createDto.SlotNumber,
                     Floor = createDto.Floor,
                     Section = createDto.Section,
-                    SlotImageUrl = createDto.SlotImageUrl,
+                    SlotImage = ConvertBase64ToByteArray(createDto.SlotImageBase64), // CHANGED THIS LINE
                     IsOccupied = false,
                     IsActive = true
                 };
@@ -90,6 +120,44 @@ namespace SmartParkingSystem.Services
             }
         }
 
+        //public async Task<ParkingSlotResponseDto> UpdateAsync(int id, UpdateParkingSlotDto updateDto)
+        //{
+        //    try
+        //    {
+        //        var slot = await _parkingSlotRepository.GetByIdAsync(id);
+
+        //        if (slot == null)
+        //            throw new ArgumentException($"Parking slot with Id {id} not found.");
+
+        //        // Check if slot number already exists (excluding current slot)
+        //        var existingSlot = await _parkingSlotRepository.GetAllAsync();
+        //        var duplicateSlot = existingSlot.FirstOrDefault(s => s.SlotNumber == updateDto.SlotNumber && s.Id != id);
+        //        if (duplicateSlot != null)
+        //            throw new InvalidOperationException($"Slot number '{updateDto.SlotNumber}' already exists.");
+
+        //        slot.SlotNumber = updateDto.SlotNumber;
+        //        slot.Floor = updateDto.Floor;
+        //        slot.Section = updateDto.Section;
+        //        slot.SlotImage = updateDto.SlotImage;
+        //        slot.IsActive = updateDto.IsActive;
+
+        //        var updatedSlot = await _parkingSlotRepository.UpdateAsync(slot);
+        //        return await MapToParkingSlotResponseDto(updatedSlot);
+        //    }
+        //    catch (ArgumentException)
+        //    {
+        //        throw;
+        //    }
+        //    catch (InvalidOperationException)
+        //    {
+        //        throw;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception($"Error updating parking slot with Id {id}.", ex);
+        //    }
+        //}
+
         public async Task<ParkingSlotResponseDto> UpdateAsync(int id, UpdateParkingSlotDto updateDto)
         {
             try
@@ -99,7 +167,6 @@ namespace SmartParkingSystem.Services
                 if (slot == null)
                     throw new ArgumentException($"Parking slot with Id {id} not found.");
 
-                // Check if slot number already exists (excluding current slot)
                 var existingSlot = await _parkingSlotRepository.GetAllAsync();
                 var duplicateSlot = existingSlot.FirstOrDefault(s => s.SlotNumber == updateDto.SlotNumber && s.Id != id);
                 if (duplicateSlot != null)
@@ -108,7 +175,7 @@ namespace SmartParkingSystem.Services
                 slot.SlotNumber = updateDto.SlotNumber;
                 slot.Floor = updateDto.Floor;
                 slot.Section = updateDto.Section;
-                slot.SlotImageUrl = updateDto.SlotImageUrl;
+                slot.SlotImage = ConvertBase64ToByteArray(updateDto.SlotImageBase64); // CHANGED THIS LINE
                 slot.IsActive = updateDto.IsActive;
 
                 var updatedSlot = await _parkingSlotRepository.UpdateAsync(slot);
@@ -346,6 +413,41 @@ namespace SmartParkingSystem.Services
         }
 
         // Private mapping method
+        //private async Task<ParkingSlotResponseDto> MapToParkingSlotResponseDto(ParkingSlot slot)
+        //{
+        //    var dto = new ParkingSlotResponseDto
+        //    {
+        //        Id = slot.Id,
+        //        SlotNumber = slot.SlotNumber,
+        //        Floor = slot.Floor,
+        //        Section = slot.Section,
+        //        SlotImage = slot.SlotImage,
+        //        IsOccupied = slot.IsOccupied,
+        //        IsActive = slot.IsActive,
+        //        IsAvailable = !slot.IsOccupied && slot.IsActive,
+        //        NextAvailableTime = null
+        //    };
+
+        //    // If slot is occupied, try to find when it might become available
+        //    if (slot.IsOccupied)
+        //    {
+        //        try
+        //        {
+        //            var activeSession = await _parkingSessionRepository.GetActiveSessionBySlotIdAsync(slot.Id);
+        //            if (activeSession != null && activeSession.ExitTime.HasValue)
+        //            {
+        //                dto.NextAvailableTime = activeSession.ExitTime.Value;
+        //            }
+        //        }
+        //        catch
+        //        {
+        //            // If we can't determine next available time, leave it null
+        //        }
+        //    }
+
+        //    return dto;
+        //}
+
         private async Task<ParkingSlotResponseDto> MapToParkingSlotResponseDto(ParkingSlot slot)
         {
             var dto = new ParkingSlotResponseDto
@@ -354,14 +456,13 @@ namespace SmartParkingSystem.Services
                 SlotNumber = slot.SlotNumber,
                 Floor = slot.Floor,
                 Section = slot.Section,
-                SlotImageUrl = slot.SlotImageUrl,
+                SlotImageBase64 = slot.SlotImage != null ? Convert.ToBase64String(slot.SlotImage) : null, // CHANGED THIS LINE
                 IsOccupied = slot.IsOccupied,
                 IsActive = slot.IsActive,
                 IsAvailable = !slot.IsOccupied && slot.IsActive,
                 NextAvailableTime = null
             };
 
-            // If slot is occupied, try to find when it might become available
             if (slot.IsOccupied)
             {
                 try
@@ -379,6 +480,27 @@ namespace SmartParkingSystem.Services
             }
 
             return dto;
+        }
+
+        private byte[]? ConvertBase64ToByteArray(string? base64String)
+        {
+            if (string.IsNullOrEmpty(base64String))
+                return null;
+
+            try
+            {
+                // Remove data URL prefix if present (data:image/jpeg;base64,)
+                if (base64String.Contains(","))
+                {
+                    base64String = base64String.Split(',')[1];
+                }
+
+                return Convert.FromBase64String(base64String);
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

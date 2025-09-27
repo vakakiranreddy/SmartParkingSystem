@@ -577,19 +577,47 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/CreateFeatureDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateFeatureDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateFeatureDto"
+                "required": [
+                  "Name"
+                ],
+                "type": "object",
+                "properties": {
+                  "Name": {
+                    "maxLength": 50,
+                    "minLength": 0,
+                    "type": "string"
+                  },
+                  "Description": {
+                    "maxLength": 200,
+                    "minLength": 0,
+                    "type": "string"
+                  },
+                  "IconFile": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "PriceModifier": {
+                    "minimum": 0,
+                    "type": "number",
+                    "format": "double"
+                  }
+                }
+              },
+              "encoding": {
+                "Name": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                },
+                "IconFile": {
+                  "style": "form"
+                },
+                "PriceModifier": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -640,19 +668,53 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateFeatureDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateFeatureDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateFeatureDto"
+                "required": [
+                  "Name"
+                ],
+                "type": "object",
+                "properties": {
+                  "Name": {
+                    "maxLength": 50,
+                    "minLength": 0,
+                    "type": "string"
+                  },
+                  "Description": {
+                    "maxLength": 200,
+                    "minLength": 0,
+                    "type": "string"
+                  },
+                  "IconFile": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "PriceModifier": {
+                    "minimum": 0,
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "IsActive": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "encoding": {
+                "Name": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                },
+                "IconFile": {
+                  "style": "form"
+                },
+                "PriceModifier": {
+                  "style": "form"
+                },
+                "IsActive": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -2236,19 +2298,62 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateVehicleDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateVehicleDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateVehicleDto"
+                "required": [
+                  "LicensePlate",
+                  "VehicleType"
+                ],
+                "type": "object",
+                "properties": {
+                  "LicensePlate": {
+                    "maxLength": 20,
+                    "minLength": 0,
+                    "type": "string"
+                  },
+                  "VehicleType": {
+                    "$ref": "#/components/schemas/VehicleType"
+                  },
+                  "Brand": {
+                    "maxLength": 30,
+                    "minLength": 0,
+                    "type": "string"
+                  },
+                  "Model": {
+                    "maxLength": 30,
+                    "minLength": 0,
+                    "type": "string"
+                  },
+                  "Color": {
+                    "maxLength": 20,
+                    "minLength": 0,
+                    "type": "string"
+                  },
+                  "vehicleImage": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "LicensePlate": {
+                  "style": "form"
+                },
+                "VehicleType": {
+                  "style": "form"
+                },
+                "Brand": {
+                  "style": "form"
+                },
+                "Model": {
+                  "style": "form"
+                },
+                "Color": {
+                  "style": "form"
+                },
+                "vehicleImage": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -2298,19 +2403,62 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/CreateVehicleDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateVehicleDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateVehicleDto"
+                "required": [
+                  "LicensePlate",
+                  "VehicleType"
+                ],
+                "type": "object",
+                "properties": {
+                  "LicensePlate": {
+                    "maxLength": 20,
+                    "minLength": 0,
+                    "type": "string"
+                  },
+                  "VehicleType": {
+                    "$ref": "#/components/schemas/VehicleType"
+                  },
+                  "Brand": {
+                    "maxLength": 30,
+                    "minLength": 0,
+                    "type": "string"
+                  },
+                  "Model": {
+                    "maxLength": 30,
+                    "minLength": 0,
+                    "type": "string"
+                  },
+                  "Color": {
+                    "maxLength": 20,
+                    "minLength": 0,
+                    "type": "string"
+                  },
+                  "vehicleImage": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "LicensePlate": {
+                  "style": "form"
+                },
+                "VehicleType": {
+                  "style": "form"
+                },
+                "Brand": {
+                  "style": "form"
+                },
+                "Model": {
+                  "style": "form"
+                },
+                "Color": {
+                  "style": "form"
+                },
+                "vehicleImage": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -2468,14 +2616,13 @@
       },
       "BroadcastNotificationType": {
         "enum": [
-          0,
-          1,
-          2,
-          3,
-          4
+          "SystemAnnouncement",
+          "MaintenanceAlert",
+          "PromotionalOffer",
+          "PolicyUpdate",
+          "EmergencyAlert"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       },
       "BulkOccupancyUpdateRequest": {
         "type": "object",
@@ -2556,36 +2703,6 @@
         },
         "additionalProperties": false
       },
-      "CreateFeatureDto": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "maxLength": 50,
-            "minLength": 0,
-            "type": "string"
-          },
-          "description": {
-            "maxLength": 200,
-            "minLength": 0,
-            "type": "string",
-            "nullable": true
-          },
-          "iconUrl": {
-            "type": "string",
-            "format": "uri",
-            "nullable": true
-          },
-          "priceModifier": {
-            "minimum": 0,
-            "type": "number",
-            "format": "double"
-          }
-        },
-        "additionalProperties": false
-      },
       "CreateParkingRateDto": {
         "required": [
           "dailyRate",
@@ -2633,50 +2750,8 @@
             "type": "string",
             "nullable": true
           },
-          "slotImageUrl": {
+          "slotImageBase64": {
             "type": "string",
-            "format": "uri",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "CreateVehicleDto": {
-        "required": [
-          "licensePlate",
-          "vehicleType"
-        ],
-        "type": "object",
-        "properties": {
-          "licensePlate": {
-            "maxLength": 20,
-            "minLength": 0,
-            "type": "string"
-          },
-          "vehicleType": {
-            "$ref": "#/components/schemas/VehicleType"
-          },
-          "brand": {
-            "maxLength": 30,
-            "minLength": 0,
-            "type": "string",
-            "nullable": true
-          },
-          "model": {
-            "maxLength": 30,
-            "minLength": 0,
-            "type": "string",
-            "nullable": true
-          },
-          "color": {
-            "maxLength": 20,
-            "minLength": 0,
-            "type": "string",
-            "nullable": true
-          },
-          "vehicleImageUrl": {
-            "type": "string",
-            "format": "uri",
             "nullable": true
           }
         },
@@ -2733,12 +2808,11 @@
       },
       "EmailStatus": {
         "enum": [
-          0,
-          1,
-          2
+          "Pending",
+          "Sent",
+          "Failed"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       },
       "EndParkingSessionDto": {
         "required": [
@@ -2779,17 +2853,17 @@
       },
       "NotificationType": {
         "enum": [
-          0,
-          1,
-          2,
-          3,
-          4,
-          5,
-          6,
-          7
+          "Reservation",
+          "Reminder",
+          "Entry",
+          "ExitReminder",
+          "PaymentReminder",
+          "Overdue",
+          "Exit",
+          "Payment",
+          "General"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       },
       "ParkingRateResponseDto": {
         "type": "object",
@@ -2817,12 +2891,11 @@
       },
       "PaymentStatus": {
         "enum": [
-          0,
-          1,
-          2
+          "Pending",
+          "Paid",
+          "Cancelled"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       },
       "RegisterDto": {
         "required": [
@@ -2988,39 +3061,6 @@
         },
         "additionalProperties": false
       },
-      "UpdateFeatureDto": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "maxLength": 50,
-            "minLength": 0,
-            "type": "string"
-          },
-          "description": {
-            "maxLength": 200,
-            "minLength": 0,
-            "type": "string",
-            "nullable": true
-          },
-          "iconUrl": {
-            "type": "string",
-            "format": "uri",
-            "nullable": true
-          },
-          "priceModifier": {
-            "minimum": 0,
-            "type": "number",
-            "format": "double"
-          },
-          "isActive": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
       "UpdateParkingFeeDto": {
         "required": [
           "parkingFee",
@@ -3090,9 +3130,8 @@
             "type": "string",
             "nullable": true
           },
-          "slotImageUrl": {
+          "slotImageBase64": {
             "type": "string",
-            "format": "uri",
             "nullable": true
           },
           "isActive": {
@@ -3150,66 +3189,23 @@
         },
         "additionalProperties": false
       },
-      "UpdateVehicleDto": {
-        "required": [
-          "licensePlate",
-          "vehicleType"
-        ],
-        "type": "object",
-        "properties": {
-          "licensePlate": {
-            "maxLength": 20,
-            "minLength": 0,
-            "type": "string"
-          },
-          "vehicleType": {
-            "$ref": "#/components/schemas/VehicleType"
-          },
-          "brand": {
-            "maxLength": 30,
-            "minLength": 0,
-            "type": "string",
-            "nullable": true
-          },
-          "model": {
-            "maxLength": 30,
-            "minLength": 0,
-            "type": "string",
-            "nullable": true
-          },
-          "color": {
-            "maxLength": 20,
-            "minLength": 0,
-            "type": "string",
-            "nullable": true
-          },
-          "vehicleImageUrl": {
-            "type": "string",
-            "format": "uri",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "UserRole": {
         "enum": [
-          0,
-          1,
-          2
+          "Admin",
+          "User",
+          "Guard"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       },
       "VehicleType": {
         "enum": [
-          0,
-          1,
-          2,
-          3,
-          4
+          "Car",
+          "Motorcycle",
+          "Truck",
+          "SUV",
+          "Van"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       }
     },
     "securitySchemes": {

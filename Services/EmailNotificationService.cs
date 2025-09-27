@@ -252,6 +252,17 @@ namespace SmartParkingSystem.Services
                     $"• Total Fee: ₹{session.ParkingFee:F2}\n" +
                     $"• Session ID: {session.Id}"
                 ),
+                NotificationType.General => (
+     "Welcome to Smart Parking System 🚗", // ← Add the subject
+     $"Dear {userName},\n\n" +
+     "🎉 Congratulations! Your account has been successfully registered in Smart Parking System.\n\n" +
+     "Now you can:\n" +
+     "✅ Reserve parking slots online\n" +
+     "✅ Manage your vehicles\n" +
+     "✅ Get reminders & payment updates\n\n" +
+     "Thank you for joining us!\n" +
+     "- Smart Parking System Team"
+ ),
                 _ => (
                     "Smart Parking System Notification",
                     $"Dear {userName},\n\n" +

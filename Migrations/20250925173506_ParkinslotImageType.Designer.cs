@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartParkingSystem.Data;
 
@@ -11,9 +12,11 @@ using SmartParkingSystem.Data;
 namespace SmartParkingSystem.Migrations
 {
     [DbContext(typeof(ParkingDbContext))]
-    partial class ParkingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250925173506_ParkinslotImageType")]
+    partial class ParkinslotImageType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,39 +24,6 @@ namespace SmartParkingSystem.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Feature", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<byte[]>("IconData")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<decimal>("PriceModifier")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Features");
-                });
 
             modelBuilder.Entity("SmartParkingSystem.Models.BroadcastNotification", b =>
                 {
@@ -148,6 +118,43 @@ namespace SmartParkingSystem.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("EmailNotifications");
+                });
+
+            modelBuilder.Entity("SmartParkingSystem.Models.Feature", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("IconUrl")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("PriceModifier")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Features");
                 });
 
             modelBuilder.Entity("SmartParkingSystem.Models.ParkingRate", b =>
@@ -379,9 +386,10 @@ namespace SmartParkingSystem.Migrations
                     b.Property<int>("OwnerId")
                         .HasColumnType("int");
 
-                    b.Property<byte[]>("VehicleImage")
+                    b.Property<string>("VehicleImageUrl")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<int>("VehicleType")
                         .HasColumnType("int");
@@ -444,7 +452,7 @@ namespace SmartParkingSystem.Migrations
 
             modelBuilder.Entity("SmartParkingSystem.Models.SlotFeature", b =>
                 {
-                    b.HasOne("Feature", "Feature")
+                    b.HasOne("SmartParkingSystem.Models.Feature", "Feature")
                         .WithMany("SlotFeatures")
                         .HasForeignKey("FeatureId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -472,7 +480,7 @@ namespace SmartParkingSystem.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("Feature", b =>
+            modelBuilder.Entity("SmartParkingSystem.Models.Feature", b =>
                 {
                     b.Navigation("SlotFeatures");
                 });

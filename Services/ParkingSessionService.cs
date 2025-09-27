@@ -239,7 +239,7 @@ namespace SmartParkingSystem.Services
             }
             catch (ArgumentException) { throw; }
             catch (UnauthorizedAccessException) { throw; }
-            catch (InvalidOperationException) { throw; }
+            
             catch (Exception ex)
             {
                 throw new Exception("Error booking parking slot.", ex);
@@ -435,6 +435,57 @@ namespace SmartParkingSystem.Services
             }
         }
 
+        //public async Task<ParkingSessionResponseDto> EndSessionAsync(EndParkingSessionDto endSessionDto)
+        //{
+        //    try
+        //    {
+        //        var session = await _parkingSessionRepository.GetByIdAsync(endSessionDto.SessionId);
+
+        //        if (session == null)
+        //            throw new ArgumentException($"Session with Id {endSessionDto.SessionId} not found.");
+
+        //        if (session.Status != SessionStatus.Active)
+        //            throw new InvalidOperationException("Only active sessions can be ended.");
+
+        //        // Update slot occupancy
+        //        var slot = await _parkingSlotRepository.GetByIdAsync(session.SlotId);
+        //        if (slot != null)
+        //        {
+        //            slot.IsOccupied = false;
+        //            await _parkingSlotRepository.UpdateAsync(slot);
+        //        }
+
+        //        // Calculate parking fee
+        //        var exitTime = endSessionDto.ExitTime ?? DateTime.UtcNow;
+        //        var parkingFee = await CalculateParkingFeeAsync(session.Id);
+
+        //        // End session
+        //        session.ExitTime = exitTime;
+        //        session.Status = SessionStatus.Completed;
+        //        session.ParkingFee = parkingFee;
+
+        //        var updatedSession = await _parkingSessionRepository.UpdateAsync(session);
+
+        //        // Send exit notification
+        //        _ = Task.Run(async () => {
+        //            await SendSessionNotificationAsync(updatedSession.Id, NotificationType.Exit);
+        //        });
+
+        //        return await MapToParkingSessionResponseDto(updatedSession);
+        //    }
+        //    catch (ArgumentException)
+        //    {
+        //        throw;
+        //    }
+        //    catch (InvalidOperationException)
+        //    {
+        //        throw;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("Error ending session.", ex);
+        //    }
+        //}
         public async Task<ParkingSessionResponseDto> EndSessionAsync(EndParkingSessionDto endSessionDto)
         {
             try
@@ -455,21 +506,21 @@ namespace SmartParkingSystem.Services
                     await _parkingSlotRepository.UpdateAsync(slot);
                 }
 
-                // Calculate parking fee
+                // Set exit time FIRST
                 var exitTime = endSessionDto.ExitTime ?? DateTime.UtcNow;
-                var parkingFee = await CalculateParkingFeeAsync(session.Id);
-
-                // End session
                 session.ExitTime = exitTime;
+
+                // Calculate parking fee directly here
+                var parkingFee = await CalculateFeeForSession(session);
+
+                // Update session with fee and completion status
                 session.Status = SessionStatus.Completed;
                 session.ParkingFee = parkingFee;
 
                 var updatedSession = await _parkingSessionRepository.UpdateAsync(session);
 
-                // Send exit notification
-                _ = Task.Run(async () => {
-                    await SendSessionNotificationAsync(updatedSession.Id, NotificationType.Exit);
-                });
+                // Send exit notification with calculated fee
+                await SendSessionNotificationAsync(updatedSession.Id, NotificationType.Exit);
 
                 return await MapToParkingSessionResponseDto(updatedSession);
             }
@@ -487,6 +538,28 @@ namespace SmartParkingSystem.Services
             }
         }
 
+        // Helper method to calculate fee for a session object
+        private async Task<decimal> CalculateFeeForSession(ParkingSession session)
+        {
+            try
+            {
+                var vehicle = await _vehicleRepository.GetByIdAsync(session.VehicleId);
+                if (vehicle == null) return 0;
+
+                var rate = await _parkingRateRepository.GetByVehicleTypeAsync(vehicle.VehicleType);
+                if (rate == null) return 0;
+
+                var exitTime = session.ExitTime ?? DateTime.UtcNow;
+                var duration = exitTime - session.EntryTime;
+                var hours = Math.Ceiling(duration.TotalHours);
+
+                return (decimal)hours * rate.HourlyRate;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
         // Payment operations - WITH EMAIL NOTIFICATIONS
         public async Task<bool> ProcessPaymentAsync(int sessionId, PaymentStatus paymentStatus)
         {

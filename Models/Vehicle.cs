@@ -28,10 +28,10 @@ namespace SmartParkingSystem.Models
         [StringLength(20)]
         public string Color { get; set; }
 
-        [StringLength(255)]
-        [Url]
-        public string VehicleImageUrl { get; set; }
-
+        //[StringLength(255)]
+        //[Url]
+        //public string VehicleImageUrl { get; set; }
+        public byte[] VehicleImage { get; set; }
         [Required]
         public int OwnerId { get; set; }
 

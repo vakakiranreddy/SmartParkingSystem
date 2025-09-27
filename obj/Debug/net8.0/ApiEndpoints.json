@@ -339,9 +339,24 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "dto",
-        "Type": "SmartParkingSystem.DTOs.Feature.CreateFeatureDto",
-        "IsRequired": true
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "IconFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "PriceModifier",
+        "Type": "System.Decimal",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -376,9 +391,29 @@
         "IsRequired": true
       },
       {
-        "Name": "dto",
-        "Type": "SmartParkingSystem.DTOs.Feature.UpdateFeatureDto",
-        "IsRequired": true
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "IconFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "PriceModifier",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      },
+      {
+        "Name": "IsActive",
+        "Type": "System.Boolean",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -1345,9 +1380,34 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "createDto",
-        "Type": "SmartParkingSystem.DTOs.Vehicle.CreateVehicleDto",
-        "IsRequired": true
+        "Name": "LicensePlate",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Brand",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Model",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Color",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "vehicleImage",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -1382,9 +1442,34 @@
         "IsRequired": true
       },
       {
-        "Name": "updateDto",
-        "Type": "SmartParkingSystem.DTOs.Vehicle.UpdateVehicleDto",
-        "IsRequired": true
+        "Name": "LicensePlate",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Brand",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Model",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Color",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "vehicleImage",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

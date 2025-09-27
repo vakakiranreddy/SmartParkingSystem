@@ -92,6 +92,66 @@ namespace SmartParkingSystem.Services
         //    }
         //}
 
+        //private async Task ProcessNotificationsAsync()
+        //{
+        //    using var scope = _serviceProvider.CreateScope();
+        //    var sessionRepo = scope.ServiceProvider.GetRequiredService<IParkingSessionRepository>();
+
+        //    var ist = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+        //    var nowIst = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, ist);
+
+        //    var reservedSessions = await sessionRepo.GetReservationsAsync();
+        //    var activeSessions = await sessionRepo.GetActiveSessionsAsync();
+
+        //    // ----------------------
+        //    // Reservation reminders (10 minutes before entry)
+        //    // ----------------------
+        //    foreach (var session in reservedSessions
+        //        .Where(s => s.Status == SessionStatus.Reserved &&
+        //                    s.EntryTime != null))
+        //    {
+        //        var entryIst = TimeZoneInfo.ConvertTimeFromUtc(session.EntryTime, ist);
+        //        var minutesToEntry = (entryIst - nowIst).TotalMinutes;
+
+        //        if (minutesToEntry <= 10 && minutesToEntry > 0 && !session.ReminderSent)
+        //        {
+        //            await SendSessionEmailAsync(session, NotificationType.Reminder);
+        //            session.ReminderSent = true;
+        //            await sessionRepo.UpdateAsync(session);
+        //        }
+        //    }
+
+        //    // ----------------------
+        //    // Exit reminders (10 minutes before exit)
+        //    // ----------------------
+        //    foreach (var session in activeSessions
+        //        .Where(s => s.ExitTime.HasValue))
+        //    {
+        //        var exitIst = TimeZoneInfo.ConvertTimeFromUtc(session.ExitTime.Value, ist);
+        //        var minutesToExit = (exitIst - nowIst).TotalMinutes;
+
+        //        if (minutesToExit <= 10 && minutesToExit > 5 && !session.ExitReminderSent)
+        //        {
+        //            await SendSessionEmailAsync(session, NotificationType.ExitReminder);
+        //        }
+        //    }
+
+        //    // ----------------------
+        //    // Overdue notifications (15 minutes past exit)
+        //    // ----------------------
+        //    foreach (var session in activeSessions
+        //        .Where(s => s.ExitTime.HasValue))
+        //    {
+        //        var exitIst = TimeZoneInfo.ConvertTimeFromUtc(session.ExitTime.Value, ist);
+        //        if ((nowIst - exitIst).TotalMinutes > 15)
+        //        {
+        //            await SendSessionEmailAsync(session, NotificationType.Overdue);
+        //        }
+        //    }
+        //}
+
+
+
         private async Task ProcessNotificationsAsync()
         {
             using var scope = _serviceProvider.CreateScope();
@@ -104,25 +164,24 @@ namespace SmartParkingSystem.Services
             var activeSessions = await sessionRepo.GetActiveSessionsAsync();
 
             // ----------------------
-            // Reservation reminders (10 minutes before entry)
+            // Entry reminders (5–10 minutes before entry)
             // ----------------------
             foreach (var session in reservedSessions
-                .Where(s => s.Status == SessionStatus.Reserved &&
-                            s.EntryTime != null))
+                .Where(s => s.Status == SessionStatus.Reserved && s.EntryTime != null))
             {
                 var entryIst = TimeZoneInfo.ConvertTimeFromUtc(session.EntryTime, ist);
                 var minutesToEntry = (entryIst - nowIst).TotalMinutes;
 
-                if (minutesToEntry <= 10 && minutesToEntry > 0 && !session.ReminderSent)
+                if (minutesToEntry <= 10 && minutesToEntry > 5 && !session.EntryReminderSent)
                 {
                     await SendSessionEmailAsync(session, NotificationType.Reminder);
-                    session.ReminderSent = true;
+                    session.EntryReminderSent = true;
                     await sessionRepo.UpdateAsync(session);
                 }
             }
 
             // ----------------------
-            // Exit reminders (10 minutes before exit)
+            // Exit reminders (5–10 minutes before exit)
             // ----------------------
             foreach (var session in activeSessions
                 .Where(s => s.ExitTime.HasValue))
@@ -130,28 +189,29 @@ namespace SmartParkingSystem.Services
                 var exitIst = TimeZoneInfo.ConvertTimeFromUtc(session.ExitTime.Value, ist);
                 var minutesToExit = (exitIst - nowIst).TotalMinutes;
 
-                if (minutesToExit <= 10 && minutesToExit > 9)
+                if (minutesToExit <= 10 && minutesToExit > 5 && !session.ExitReminderSent)
                 {
                     await SendSessionEmailAsync(session, NotificationType.ExitReminder);
+                    session.ExitReminderSent = true;
+                    await sessionRepo.UpdateAsync(session);
                 }
             }
 
             // ----------------------
-            // Overdue notifications (15 minutes past exit)
+            // Overdue notifications (15+ minutes past exit)
             // ----------------------
             foreach (var session in activeSessions
                 .Where(s => s.ExitTime.HasValue))
             {
                 var exitIst = TimeZoneInfo.ConvertTimeFromUtc(session.ExitTime.Value, ist);
-                if ((nowIst - exitIst).TotalMinutes > 15)
+                if ((nowIst - exitIst).TotalMinutes > 15 && !session.OverdueReminderSent)
                 {
                     await SendSessionEmailAsync(session, NotificationType.Overdue);
+                    session.OverdueReminderSent = true;
+                    await sessionRepo.UpdateAsync(session);
                 }
             }
         }
-
-
-
 
 
 

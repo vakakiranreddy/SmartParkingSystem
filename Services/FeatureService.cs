@@ -1,4 +1,4 @@
-﻿using SmartParkingSystem.DTOs.Feature;
+﻿
 using SmartParkingSystem.DTOs.ParkingRate;
 using SmartParkingSystem.Interfaces.Repositories;
 using SmartParkingSystem.Interfaces.Services;
@@ -30,16 +30,49 @@ namespace SmartParkingSystem.Services
             return MapToDto(feature);
         }
 
+        //public async Task<FeatureResponseDto> CreateAsync(CreateFeatureDto createDto)
+        //{
+        //    if (await _featureRepository.NameExistsAsync(createDto.Name))
+        //        throw new InvalidOperationException($"Feature name '{createDto.Name}' already exists.");
+
+        //    var feature = new Feature
+        //    {
+        //        Name = createDto.Name,
+        //        Description = createDto.Description,
+        //        IconUrl = createDto.IconUrl,
+        //        PriceModifier = createDto.PriceModifier,
+        //        IsActive = true
+        //    };
+
+        //    var created = await _featureRepository.AddAsync(feature);
+        //    return MapToDto(created);
+        //}
+
         public async Task<FeatureResponseDto> CreateAsync(CreateFeatureDto createDto)
         {
             if (await _featureRepository.NameExistsAsync(createDto.Name))
                 throw new InvalidOperationException($"Feature name '{createDto.Name}' already exists.");
 
+            byte[] iconData = null;
+            if (createDto.IconFile != null)
+            {
+                // Validate SVG file
+                if (!createDto.IconFile.ContentType.Equals("image/svg+xml", StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidOperationException("Only SVG files are allowed for icons.");
+
+                if (createDto.IconFile.Length > 1024 * 1024) // 1MB limit
+                    throw new InvalidOperationException("Icon file size must be less than 1MB.");
+
+                using var memoryStream = new MemoryStream();
+                await createDto.IconFile.CopyToAsync(memoryStream);
+                iconData = memoryStream.ToArray();
+            }
+
             var feature = new Feature
             {
                 Name = createDto.Name,
                 Description = createDto.Description,
-                IconUrl = createDto.IconUrl,
+                IconData = iconData,
                 PriceModifier = createDto.PriceModifier,
                 IsActive = true
             };
@@ -48,20 +81,53 @@ namespace SmartParkingSystem.Services
             return MapToDto(created);
         }
 
+        //public async Task<FeatureResponseDto> UpdateAsync(int id, UpdateFeatureDto updateDto)
+        //{
+        //    var feature = await _featureRepository.GetByIdAsync(id);
+        //    if (feature == null)
+        //        throw new ArgumentException($"Feature with Id {id} not found.");
+
+        //    // check duplicate
+        //    var existing = await _featureRepository.GetByNameAsync(updateDto.Name);
+        //    if (existing != null && existing.Id != id)
+        //        throw new InvalidOperationException($"Feature name '{updateDto.Name}' already exists.");
+
+        //    feature.Name = updateDto.Name;
+        //    feature.Description = updateDto.Description;
+        //    feature.IconUrl = updateDto.IconUrl;
+        //    feature.PriceModifier = updateDto.PriceModifier;
+        //    feature.IsActive = updateDto.IsActive;
+
+        //    var updated = await _featureRepository.UpdateAsync(feature);
+        //    return MapToDto(updated);
+        //}
+
         public async Task<FeatureResponseDto> UpdateAsync(int id, UpdateFeatureDto updateDto)
         {
             var feature = await _featureRepository.GetByIdAsync(id);
             if (feature == null)
                 throw new ArgumentException($"Feature with Id {id} not found.");
 
-            // check duplicate
             var existing = await _featureRepository.GetByNameAsync(updateDto.Name);
             if (existing != null && existing.Id != id)
                 throw new InvalidOperationException($"Feature name '{updateDto.Name}' already exists.");
 
+            // Update icon if new file provided
+            if (updateDto.IconFile != null)
+            {
+                if (!updateDto.IconFile.ContentType.Equals("image/svg+xml", StringComparison.OrdinalIgnoreCase))
+                    throw new InvalidOperationException("Only SVG files are allowed for icons.");
+
+                if (updateDto.IconFile.Length > 1024 * 1024)
+                    throw new InvalidOperationException("Icon file size must be less than 1MB.");
+
+                using var memoryStream = new MemoryStream();
+                await updateDto.IconFile.CopyToAsync(memoryStream);
+                feature.IconData = memoryStream.ToArray();
+            }
+
             feature.Name = updateDto.Name;
             feature.Description = updateDto.Description;
-            feature.IconUrl = updateDto.IconUrl;
             feature.PriceModifier = updateDto.PriceModifier;
             feature.IsActive = updateDto.IsActive;
 
@@ -89,7 +155,7 @@ namespace SmartParkingSystem.Services
             Id = f.Id,
             Name = f.Name,
             Description = f.Description,
-            IconUrl = f.IconUrl,
+            IconUrl = f.IconData != null ? $"data:image/svg+xml;base64,{Convert.ToBase64String(f.IconData)}" : null,
             PriceModifier = f.PriceModifier,
             IsActive = f.IsActive
         };

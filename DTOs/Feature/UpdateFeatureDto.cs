@@ -1,22 +1,40 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿//using System.ComponentModel.DataAnnotations;
 
-namespace SmartParkingSystem.DTOs.Feature
+//namespace SmartParkingSystem.DTOs.Feature
+//{
+//    public class UpdateFeatureDto
+//    {
+//        [Required]
+//        [StringLength(50)]
+//        public string Name { get; set; }
+
+//        [StringLength(200)]
+//        public string Description { get; set; }
+
+//        [Url]
+//        public string IconUrl { get; set; }
+
+//        [Range(0, double.MaxValue)]
+//        public decimal PriceModifier { get; set; } = 0;
+
+//        public bool IsActive { get; set; }
+//    }
+//}
+using System.ComponentModel.DataAnnotations;
+
+public class UpdateFeatureDto
 {
-    public class UpdateFeatureDto
-    {
-        [Required]
-        [StringLength(50)]
-        public string Name { get; set; }
+    [Required]
+    [StringLength(50)]
+    public string Name { get; set; }
 
-        [StringLength(200)]
-        public string Description { get; set; }
+    [StringLength(200)]
+    public string Description { get; set; }
 
-        [Url]
-        public string IconUrl { get; set; }
+    public IFormFile IconFile { get; set; } // Add file upload
 
-        [Range(0, double.MaxValue)]
-        public decimal PriceModifier { get; set; } = 0;
+    [Range(0, double.MaxValue)]
+    public decimal PriceModifier { get; set; } = 0;
 
-        public bool IsActive { get; set; }
-    }
+    public bool IsActive { get; set; }
 }
