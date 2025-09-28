@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartParkingSystem.Data;
 
@@ -11,9 +12,11 @@ using SmartParkingSystem.Data;
 namespace SmartParkingSystem.Migrations
 {
     [DbContext(typeof(ParkingDbContext))]
-    partial class ParkingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250927061031_addedGuestModel")]
+    partial class addedGuestModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -391,8 +394,9 @@ namespace SmartParkingSystem.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
-                    b.Property<byte[]>("ProfileImage")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("ProfileImageUrl")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<int>("Role")
                         .HasColumnType("int");

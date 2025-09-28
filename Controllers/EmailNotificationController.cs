@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartParkingSystem.DTOs.EmailNotification;
 using SmartParkingSystem.Interfaces.Services;
+using System.Security.Claims;
 
 namespace SmartParkingSystem.Controllers
 {
@@ -65,14 +66,41 @@ namespace SmartParkingSystem.Controllers
         //        return StatusCode(500, new { message = "An error occurred while retrieving notifications.", details = ex.Message });
         //    }
         //}
+        //[HttpGet("user/{userId}")]
+        //public async Task<ActionResult<IEnumerable<EmailNotificationResponseDto>>> GetUserNotifications(int userId)
+        //{
+        //    try
+        //    {
+        //        // Users can only view their own notifications, unless they're admin/guard
+        //        var currentUserRole = User.FindFirst("role")?.Value;
+        //        var currentUserId = int.Parse(User.FindFirst("nameid")?.Value ?? "0"); // <-- FIXED
+
+        //        if (currentUserRole != "Admin" && currentUserRole != "Guard" && currentUserId != userId)
+        //        {
+        //            return StatusCode(StatusCodes.Status403Forbidden,
+        //                new { message = "You can only view your own notifications." });
+        //        }
+
+        //        var notifications = await _emailService.GetUserNotificationsAsync(userId);
+        //        return Ok(notifications);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new { message = "An error occurred while retrieving notifications.", details = ex.Message });
+        //    }
+        //}
+
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<EmailNotificationResponseDto>>> GetUserNotifications(int userId)
         {
             try
             {
-                // Users can only view their own notifications, unless they're admin/guard
-                var currentUserRole = User.FindFirst("role")?.Value;
-                var currentUserId = int.Parse(User.FindFirst("nameid")?.Value ?? "0"); // <-- FIXED
+                var currentUserRole = User.FindFirst(ClaimTypes.Role)?.Value;
+                var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+                Console.WriteLine($"Extracted Role: {currentUserRole}");
+                Console.WriteLine($"Extracted UserId: {currentUserId}");
+                Console.WriteLine($"Requested UserId: {userId}");
 
                 if (currentUserRole != "Admin" && currentUserRole != "Guard" && currentUserId != userId)
                 {

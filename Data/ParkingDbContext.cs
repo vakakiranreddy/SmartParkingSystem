@@ -14,6 +14,7 @@ namespace SmartParkingSystem.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<ParkingSlot> ParkingSlots { get; set; }
+        public DbSet<Guest> Guests { get; set; }
         public DbSet<ParkingSession> ParkingSessions { get; set; }
         public DbSet<EmailNotification> EmailNotifications { get; set; }
         public DbSet<BroadcastNotification> BroadcastNotifications { get; set; }

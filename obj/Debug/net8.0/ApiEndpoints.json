@@ -888,6 +888,22 @@
   },
   {
     "ContainingType": "SmartParkingSystem.Controllers.ParkingSessionController",
+    "Method": "StartGuestSession",
+    "RelativePath": "api/ParkingSession/start-guest",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "guestDto",
+        "Type": "SmartParkingSystem.DTOs.ParkingSession.StartGuestSessionDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartParkingSystem.Controllers.ParkingSessionController",
     "Method": "GetUnpaidSessions",
     "RelativePath": "api/ParkingSession/unpaid",
     "HttpMethod": "GET",

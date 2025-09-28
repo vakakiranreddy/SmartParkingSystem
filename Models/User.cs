@@ -36,9 +36,8 @@ namespace SmartParkingSystem.Models
         [Required]
         public UserRole Role { get; set; } = UserRole.User;
 
-        [StringLength(255)]
-        [Url]
-        public string? ProfileImageUrl { get; set; }
+        
+        public byte[]? ProfileImage { get; set; }
 
         public bool IsActive { get; set; } = true;
 

@@ -16,8 +16,6 @@ namespace SmartParkingSystem.DTOs.User
         [Phone]
         [StringLength(15)]
         public string PhoneNumber { get; set; }
-
-        [Url]
-        public string ProfileImageUrl { get; set; }
+        public string? ProfileImageBase64 { get; set; }
     }
 }

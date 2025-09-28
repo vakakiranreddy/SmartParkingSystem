@@ -94,7 +94,19 @@ namespace SmartParkingSystem.Services
                 user.FirstName = updateDto.FirstName;
                 user.LastName = updateDto.LastName;
                 user.PhoneNumber = updateDto.PhoneNumber;
-                user.ProfileImageUrl = updateDto.ProfileImageUrl;
+
+                // Only update image if provided and valid
+                if (!string.IsNullOrEmpty(updateDto.ProfileImageBase64))
+                {
+                    try
+                    {
+                        user.ProfileImage = Convert.FromBase64String(updateDto.ProfileImageBase64);
+                    }
+                    catch (FormatException)
+                    {
+                        throw new ArgumentException("Invalid image format provided.");
+                    }
+                }
 
                 var updatedUser = await _userRepository.UpdateAsync(user);
                 return MapToUserResponseDto(updatedUser);
@@ -281,7 +293,7 @@ namespace SmartParkingSystem.Services
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 Role = user.Role,
-                ProfileImageUrl = user.ProfileImageUrl,
+                ProfileImageBase64 = user.ProfileImage != null ? Convert.ToBase64String(user.ProfileImage) : null,
                 IsActive = user.IsActive,
                 CreatedAt = user.CreatedAt
             };

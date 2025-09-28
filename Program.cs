@@ -101,7 +101,7 @@ builder.Services.AddScoped<IFeatureRepository, FeatureRepository>();
 builder.Services.AddScoped<IParkingRateRepository, ParkingRateRepository>();
 builder.Services.AddScoped<IEmailNotificationRepository, EmailNotificationRepository>();
 builder.Services.AddScoped<IBroadcastNotificationRepository, BroadcastNotificationRepository>();
-
+builder.Services.AddScoped<IGuestRepository, GuestRepository>();
 // Register Services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();

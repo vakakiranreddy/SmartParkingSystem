@@ -10,7 +10,8 @@ namespace SmartParkingSystem.DTOs.User
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public UserRole Role { get; set; }
-        public string ProfileImageUrl { get; set; }
+        public string? ProfileImageBase64 { get; set; }
+
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
     }

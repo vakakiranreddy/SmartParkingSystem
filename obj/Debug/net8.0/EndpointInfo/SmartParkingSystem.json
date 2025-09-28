@@ -1125,6 +1125,37 @@
         }
       }
     },
+    "/api/ParkingSession/start-guest": {
+      "post": {
+        "tags": [
+          "ParkingSession"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartGuestSessionDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartGuestSessionDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartGuestSessionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/ParkingSession/{id}/fee": {
       "put": {
         "tags": [
@@ -2959,7 +2990,6 @@
           "emailAddress",
           "message",
           "notificationType",
-          "parkingSessionId",
           "subject",
           "userId"
         ],
@@ -3008,6 +3038,71 @@
           },
           "isOccupied": {
             "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "StartGuestSessionDto": {
+        "required": [
+          "firstName",
+          "lastName",
+          "licensePlate",
+          "phoneNumber",
+          "slotId",
+          "vehicleType"
+        ],
+        "type": "object",
+        "properties": {
+          "slotId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string"
+          },
+          "phoneNumber": {
+            "maxLength": 15,
+            "minLength": 0,
+            "type": "string"
+          },
+          "email": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "licensePlate": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string"
+          },
+          "vehicleType": {
+            "$ref": "#/components/schemas/VehicleType"
+          },
+          "brand": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "model": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "color": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string",
             "nullable": true
           }
         },
@@ -3164,9 +3259,8 @@
             "type": "string",
             "format": "tel"
           },
-          "profileImageUrl": {
+          "profileImageBase64": {
             "type": "string",
-            "format": "uri",
             "nullable": true
           }
         },

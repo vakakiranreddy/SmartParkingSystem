@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using SmartParkingSystem.Models;
 
-namespace SmartParkingSystem.Models
+namespace SmartParkingSystem.DTOs.ParkingSession
 {
-    public class Guest
+    public class StartGuestSessionDto
     {
-        [Key]
-        public int Id { get; set; }
+        [Required]
+        public int SlotId { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -37,7 +38,5 @@ namespace SmartParkingSystem.Models
 
         [StringLength(20)]
         public string Color { get; set; }
-
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
