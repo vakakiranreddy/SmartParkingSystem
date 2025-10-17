@@ -11,14 +11,14 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add Controllers
+
 builder.Services.AddControllers();
 
-// Database Context
+
 builder.Services.AddDbContext<ParkingDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// CORS (allow Angular or any frontend)
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -65,7 +65,7 @@ builder.Services.AddSwaggerGen(options =>
         Description = "Backend API for managing Smart Parking System with JWT authentication and role-based access."
     });
 
-    // Add JWT Auth to Swagger
+    
     var securityScheme = new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -91,7 +91,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-// Register Repositories
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 builder.Services.AddScoped<IParkingSlotRepository, ParkingSlotRepository>();
@@ -102,7 +102,7 @@ builder.Services.AddScoped<IParkingRateRepository, ParkingRateRepository>();
 builder.Services.AddScoped<IEmailNotificationRepository, EmailNotificationRepository>();
 builder.Services.AddScoped<IBroadcastNotificationRepository, BroadcastNotificationRepository>();
 builder.Services.AddScoped<IGuestRepository, GuestRepository>();
-// Register Services
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
@@ -115,21 +115,12 @@ builder.Services.AddScoped<IEmailNotificationService, EmailNotificationService>(
 builder.Services.AddScoped<IBroadcastNotificationService, BroadcastNotificationService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
-// Background Service (notifications)
+
 builder.Services.AddHostedService<NotificationBackgroundService>();
 
 var app = builder.Build();
 
-// Middleware pipeline
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI(c =>
-//    {
-//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Smart Parking System API v1");
-//        c.DocumentTitle = "Smart Parking API Docs";
-//    });
-//}
+
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {

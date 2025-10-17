@@ -12,7 +12,7 @@ public class ParkingRateService : IParkingRateService
         _parkingRateRepository = parkingRateRepository;
     }
 
-    // Basic CRUD methods
+   
     public async Task<ParkingRateResponseDto> GetByIdAsync(int id)
     {
         try
@@ -51,7 +51,7 @@ public class ParkingRateService : IParkingRateService
     {
         try
         {
-            // Check if rate for this vehicle type already exists and is active
+            
             var existingRate = await _parkingRateRepository.GetByVehicleTypeAsync(createDto.VehicleType);
             if (existingRate != null)
                 throw new InvalidOperationException($"Active parking rate for vehicle type '{createDto.VehicleType}' already exists.");
@@ -134,7 +134,7 @@ public class ParkingRateService : IParkingRateService
         }
     }
 
-    // Rate-specific methods
+   
     public async Task<ParkingRateResponseDto> GetRateByVehicleTypeAsync(VehicleType vehicleType)
     {
         try
@@ -169,7 +169,7 @@ public class ParkingRateService : IParkingRateService
         }
     }
 
-    // Private mapping method
+   
     private ParkingRateResponseDto MapToParkingRateResponseDto(ParkingRate rate)
     {
         return new ParkingRateResponseDto

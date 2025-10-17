@@ -133,92 +133,7 @@ namespace SmartParkingSystem.Services
             }
         }
 
-        // Broadcast-specific methods
-        //public async Task<bool> SendBroadcastAsync(int broadcastId)
-        //{
-        //    try
-        //    {
-        //        var broadcast = await _broadcastRepository.GetByIdAsync(broadcastId);
-        //        if (broadcast == null)
-        //            throw new ArgumentException($"Broadcast notification with Id {broadcastId} not found.");
-
-        //        if (broadcast.Status != EmailStatus.Pending)
-        //            throw new InvalidOperationException("Only pending broadcasts can be sent.");
-
-        //        // Get target users
-        //        IEnumerable<User> targetUsers;
-        //        if (broadcast.TargetRole.HasValue)
-        //        {
-        //            targetUsers = await _userRepository.GetByRoleAsync(broadcast.TargetRole.Value);
-        //        }
-        //        else
-        //        {
-        //            targetUsers = await _userRepository.GetAllAsync();
-        //        }
-
-        //        // Filter active users only
-        //        targetUsers = targetUsers.Where(u => u.IsActive);
-
-        //        var successCount = 0;
-        //        var errorMessages = new List<string>();
-
-        //        foreach (var user in targetUsers)
-        //        {
-        //            try
-        //            {
-        //                var personalizedMessage = $"Dear {user.FirstName} {user.LastName},\n\n{broadcast.Message}\n\nBest regards,\nSmart Parking System Team";
-
-        //                var emailDto = new DTOs.EmailNotification.SendEmailNotificationDto
-        //                {
-        //                    UserId = user.Id,
-        //                    ParkingSessionId = 0, // No specific session for broadcasts
-        //                    EmailAddress = user.Email,
-        //                    Subject = broadcast.Subject,
-        //                    Message = personalizedMessage,
-        //                    NotificationType = NotificationType.Entry // Generic type for broadcasts
-        //                };
-
-        //                await _emailService.SendNotificationAsync(emailDto);
-        //                successCount++;
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                errorMessages.Add($"Failed to send to {user.Email}: {ex.Message}");
-        //            }
-        //        }
-
-        //        // Update broadcast status
-        //        if (successCount > 0)
-        //        {
-        //            broadcast.Status = EmailStatus.Sent;
-        //            broadcast.SentAt = DateTime.UtcNow;
-        //            if (errorMessages.Any())
-        //            {
-        //                broadcast.ErrorMessage = string.Join("; ", errorMessages);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            broadcast.Status = EmailStatus.Failed;
-        //            broadcast.ErrorMessage = string.Join("; ", errorMessages);
-        //        }
-
-        //        await _broadcastRepository.UpdateAsync(broadcast);
-        //        return successCount > 0;
-        //    }
-        //    catch (ArgumentException)
-        //    {
-        //        throw;
-        //    }
-        //    catch (InvalidOperationException)
-        //    {
-        //        throw;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("Error sending broadcast notification.", ex);
-        //    }
-        //}
+       
         public async Task<bool> SendBroadcastAsync(int broadcastId)
         {
             try
@@ -230,7 +145,7 @@ namespace SmartParkingSystem.Services
                 if (broadcast.Status != EmailStatus.Pending)
                     throw new InvalidOperationException("Only pending broadcasts can be sent.");
 
-                // Get target users
+                
                 IEnumerable<User> targetUsers;
                 if (broadcast.TargetRole.HasValue)
                 {
@@ -246,7 +161,7 @@ namespace SmartParkingSystem.Services
                 var successCount = 0;
                 var errorMessages = new List<string>();
 
-                // Load SMTP settings from appsettings.json
+                
                 var emailSettings = _configuration.GetSection("EmailSettings");
                 var smtpHost = emailSettings["SmtpHost"];
                 var smtpPort = int.Parse(emailSettings["SmtpPort"]);
@@ -287,7 +202,7 @@ namespace SmartParkingSystem.Services
                     }
                 }
 
-                // Update broadcast status
+                
                 if (successCount > 0)
                 {
                     broadcast.Status = EmailStatus.Sent;
@@ -356,6 +271,8 @@ namespace SmartParkingSystem.Services
                 throw new Exception("Error processing pending broadcast notifications.", ex);
             }
         }
+
+
 
         private BroadcastNotificationResponseDto MapToBroadcastNotificationResponseDto(BroadcastNotification broadcast)
         {

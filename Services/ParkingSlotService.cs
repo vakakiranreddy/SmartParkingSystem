@@ -175,7 +175,7 @@ namespace SmartParkingSystem.Services
                 slot.SlotNumber = updateDto.SlotNumber;
                 slot.Floor = updateDto.Floor;
                 slot.Section = updateDto.Section;
-                slot.SlotImage = ConvertBase64ToByteArray(updateDto.SlotImageBase64); // CHANGED THIS LINE
+                slot.SlotImage = ConvertBase64ToByteArray(updateDto.SlotImageBase64); 
                 slot.IsActive = updateDto.IsActive;
 
                 var updatedSlot = await _parkingSlotRepository.UpdateAsync(slot);
@@ -412,41 +412,7 @@ namespace SmartParkingSystem.Services
             }
         }
 
-        // Private mapping method
-        //private async Task<ParkingSlotResponseDto> MapToParkingSlotResponseDto(ParkingSlot slot)
-        //{
-        //    var dto = new ParkingSlotResponseDto
-        //    {
-        //        Id = slot.Id,
-        //        SlotNumber = slot.SlotNumber,
-        //        Floor = slot.Floor,
-        //        Section = slot.Section,
-        //        SlotImage = slot.SlotImage,
-        //        IsOccupied = slot.IsOccupied,
-        //        IsActive = slot.IsActive,
-        //        IsAvailable = !slot.IsOccupied && slot.IsActive,
-        //        NextAvailableTime = null
-        //    };
-
-        //    // If slot is occupied, try to find when it might become available
-        //    if (slot.IsOccupied)
-        //    {
-        //        try
-        //        {
-        //            var activeSession = await _parkingSessionRepository.GetActiveSessionBySlotIdAsync(slot.Id);
-        //            if (activeSession != null && activeSession.ExitTime.HasValue)
-        //            {
-        //                dto.NextAvailableTime = activeSession.ExitTime.Value;
-        //            }
-        //        }
-        //        catch
-        //        {
-        //            // If we can't determine next available time, leave it null
-        //        }
-        //    }
-
-        //    return dto;
-        //}
+        
 
         private async Task<ParkingSlotResponseDto> MapToParkingSlotResponseDto(ParkingSlot slot)
         {
@@ -456,7 +422,7 @@ namespace SmartParkingSystem.Services
                 SlotNumber = slot.SlotNumber,
                 Floor = slot.Floor,
                 Section = slot.Section,
-                SlotImageBase64 = slot.SlotImage != null ? Convert.ToBase64String(slot.SlotImage) : null, // CHANGED THIS LINE
+                SlotImageBase64 = slot.SlotImage != null ? Convert.ToBase64String(slot.SlotImage) : null,
                 IsOccupied = slot.IsOccupied,
                 IsActive = slot.IsActive,
                 IsAvailable = !slot.IsOccupied && slot.IsActive,
@@ -475,7 +441,7 @@ namespace SmartParkingSystem.Services
                 }
                 catch
                 {
-                    // If we can't determine next available time, leave it null
+                   
                 }
             }
 
@@ -489,7 +455,7 @@ namespace SmartParkingSystem.Services
 
             try
             {
-                // Remove data URL prefix if present (data:image/jpeg;base64,)
+               
                 if (base64String.Contains(","))
                 {
                     base64String = base64String.Split(',')[1];

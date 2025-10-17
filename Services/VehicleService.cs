@@ -59,32 +59,11 @@ namespace SmartParkingSystem.Services
             }
         }
 
-        //public async Task<VehicleResponseDto> CreateAsync(CreateVehicleDto createDto, int ownerId)
-        //{
-        //    // Check if license plate already exists
-        //    if (await _vehicleRepository.LicensePlateExistsAsync(createDto.LicensePlate))
-        //        throw new InvalidOperationException($"License plate {createDto.LicensePlate} already exists.");
-
-        //    var vehicle = new Vehicle
-        //    {
-        //        LicensePlate = createDto.LicensePlate,
-        //        VehicleType = createDto.VehicleType,
-        //        Brand = createDto.Brand,
-        //        Model = createDto.Model,
-        //        Color = createDto.Color,
-        //        VehicleImageUrl = createDto.VehicleImageUrl,
-        //        OwnerId = ownerId,   // 👈 assign directly
-        //        IsActive = true,
-        //        CreatedAt = DateTime.UtcNow
-        //    };
-
-        //    var createdVehicle = await _vehicleRepository.AddAsync(vehicle);
-        //    return await MapToVehicleResponseDto(createdVehicle);
-        //}
+       
 
         public async Task<VehicleResponseDto> CreateAsync(CreateVehicleDto createDto, int ownerId, byte[] vehicleImage = null)
         {
-            // Check if license plate already exists
+           
             if (await _vehicleRepository.LicensePlateExistsAsync(createDto.LicensePlate))
                 throw new InvalidOperationException($"License plate {createDto.LicensePlate} already exists.");
 
@@ -105,43 +84,7 @@ namespace SmartParkingSystem.Services
             return await MapToVehicleResponseDto(createdVehicle);
         }
 
-        //public async Task<VehicleResponseDto> UpdateAsync(int id, UpdateVehicleDto updateDto)
-        //{
-        //    try
-        //    {
-        //        var vehicle = await _vehicleRepository.GetByIdAsync(id);
-
-        //        if (vehicle == null)
-        //            throw new ArgumentException($"Vehicle with Id {id} not found.");
-
-        //        // Check if license plate already exists (excluding current vehicle)
-        //        var existingVehicle = await _vehicleRepository.GetByLicensePlateAsync(updateDto.LicensePlate);
-        //        if (existingVehicle != null && existingVehicle.Id != id)
-        //            throw new InvalidOperationException($"License plate {updateDto.LicensePlate} already exists.");
-
-        //        vehicle.LicensePlate = updateDto.LicensePlate;
-        //        vehicle.VehicleType = updateDto.VehicleType;
-        //        vehicle.Brand = updateDto.Brand;
-        //        vehicle.Model = updateDto.Model;
-        //        vehicle.Color = updateDto.Color;
-        //        vehicle.VehicleImageUrl = updateDto.VehicleImageUrl;
-
-        //        var updatedVehicle = await _vehicleRepository.UpdateAsync(vehicle);
-        //        return await MapToVehicleResponseDto(updatedVehicle);
-        //    }
-        //    catch (ArgumentException)
-        //    {
-        //        throw;
-        //    }
-        //    catch (InvalidOperationException)
-        //    {
-        //        throw;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception($"Error updating vehicle with Id {id}.", ex);
-        //    }
-        //}
+        
 
         public async Task<VehicleResponseDto> UpdateAsync(int id, UpdateVehicleDto updateDto, byte[] vehicleImage = null)
         {
@@ -152,7 +95,7 @@ namespace SmartParkingSystem.Services
                 if (vehicle == null)
                     throw new ArgumentException($"Vehicle with Id {id} not found.");
 
-                // Check if license plate already exists (excluding current vehicle)
+                
                 var existingVehicle = await _vehicleRepository.GetByLicensePlateAsync(updateDto.LicensePlate);
                 if (existingVehicle != null && existingVehicle.Id != id)
                     throw new InvalidOperationException($"License plate {updateDto.LicensePlate} already exists.");
@@ -247,41 +190,7 @@ namespace SmartParkingSystem.Services
             }
         }
 
-        // Private mapping method
-        //private async Task<VehicleResponseDto> MapToVehicleResponseDto(Vehicle vehicle)
-        //{
-        //    var dto = new VehicleResponseDto
-        //    {
-        //        Id = vehicle.Id,
-        //        LicensePlate = vehicle.LicensePlate,
-        //        VehicleType = vehicle.VehicleType,
-        //        Brand = vehicle.Brand,
-        //        Model = vehicle.Model,
-        //        Color = vehicle.Color,
-        //        VehicleImageBase64 = vehicle.VehicleImage != null ? Convert.ToBase64String(vehicle.VehicleImage) : null,
-        //        OwnerId = vehicle.OwnerId,
-        //        OwnerName = "",
-        //        IsActive = vehicle.IsActive,
-        //        CreatedAt = vehicle.CreatedAt
-        //    };
-
-        //    // Get owner name
-        //    try
-        //    {
-        //        var user = await _userRepository.GetByIdAsync(vehicle.OwnerId);
-        //        if (user != null)
-        //        {
-        //            dto.OwnerName = $"{user.FirstName} {user.LastName}";
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        // If user not found, keep OwnerName empty
-        //        dto.OwnerName = "Unknown Owner";
-        //    }
-
-        //    return dto;
-        //}
+       
 
         private async Task<VehicleResponseDto> MapToVehicleResponseDto(Vehicle vehicle)
         {
@@ -300,7 +209,7 @@ namespace SmartParkingSystem.Services
                 CreatedAt = vehicle.CreatedAt
             };
 
-            // Get owner name
+            
             try
             {
                 var user = await _userRepository.GetByIdAsync(vehicle.OwnerId);

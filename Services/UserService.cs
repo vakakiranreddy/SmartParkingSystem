@@ -95,7 +95,7 @@ namespace SmartParkingSystem.Services
                 user.LastName = updateDto.LastName;
                 user.PhoneNumber = updateDto.PhoneNumber;
 
-                // Only update image if provided and valid
+              
                 if (!string.IsNullOrEmpty(updateDto.ProfileImageBase64))
                 {
                     try

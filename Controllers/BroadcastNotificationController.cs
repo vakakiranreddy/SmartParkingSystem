@@ -21,9 +21,6 @@ namespace SmartParkingSystem.Controllers
             _broadcastService = broadcastService;
         }
 
-        /// <summary>
-        /// Get all broadcast notifications
-        /// </summary>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BroadcastNotificationResponseDto>>> GetAllBroadcasts()
         {
@@ -38,9 +35,7 @@ namespace SmartParkingSystem.Controllers
             }
         }
 
-        /// <summary>
-        /// Get broadcast notification by ID
-        /// </summary>
+
         [HttpGet("{id}")]
         public async Task<ActionResult<BroadcastNotificationResponseDto>> GetBroadcastById(int id)
         {
@@ -59,9 +54,7 @@ namespace SmartParkingSystem.Controllers
             }
         }
 
-        /// <summary>
-        /// Create new broadcast notification
-        /// </summary>
+        
         [HttpPost]
         public async Task<ActionResult<BroadcastNotificationResponseDto>> CreateBroadcast([FromBody] CreateBroadcastNotificationDto createDto)
         {
@@ -76,9 +69,7 @@ namespace SmartParkingSystem.Controllers
             }
         }
 
-        /// <summary>
-        /// Update existing broadcast notification
-        /// </summary>
+       
         [HttpPut("{id}")]
         public async Task<ActionResult<BroadcastNotificationResponseDto>> UpdateBroadcast(int id, [FromBody] UpdateBroadcastNotificationDto updateDto)
         {
@@ -97,9 +88,6 @@ namespace SmartParkingSystem.Controllers
             }
         }
 
-        /// <summary>
-        /// Delete broadcast notification
-        /// </summary>
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteBroadcast(int id)
         {
@@ -173,9 +161,7 @@ namespace SmartParkingSystem.Controllers
             }
         }
 
-        /// <summary>
-        /// Get all broadcasts targeting all users
-        /// </summary>
+
         [HttpGet("all-users")]
         public async Task<ActionResult<IEnumerable<BroadcastNotificationResponseDto>>> GetBroadcastsForAllUsers()
         {
@@ -190,9 +176,6 @@ namespace SmartParkingSystem.Controllers
             }
         }
 
-        /// <summary>
-        /// Process all pending broadcasts
-        /// </summary>
         [HttpPost("process-pending")]
         public async Task<ActionResult> ProcessPendingBroadcasts()
         {

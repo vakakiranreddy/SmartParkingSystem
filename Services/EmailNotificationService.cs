@@ -31,18 +31,18 @@ namespace SmartParkingSystem.Services
         {
             try
             {
-                // This method now only handles registered users
+                
                 if (notificationDto.UserId <= 0)
                 {
                     throw new ArgumentException("SendNotificationAsync should only be called for registered users. Use SendGuestEmailAsync for guests.");
                 }
 
-                // Validate user exists
+             
                 var user = await _userRepository.GetByIdAsync(notificationDto.UserId);
                 if (user == null)
                     throw new ArgumentException($"User with Id {notificationDto.UserId} not found.");
 
-                // Load full session if provided
+               
                 ParkingSession session = null;
                 if (notificationDto.ParkingSessionId > 0)
                 {
@@ -51,16 +51,16 @@ namespace SmartParkingSystem.Services
                         throw new ArgumentException($"Parking session with Id {notificationDto.ParkingSessionId} not found.");
                 }
 
-                // Generate subject and message if session exists
+                
                 if (session != null)
                 {
                     (notificationDto.Subject, notificationDto.Message) = GenerateEmailContent(session, notificationDto.NotificationType);
                 }
 
-                // Create email notification record (only for registered users)
+                
                 var emailNotification = new EmailNotification
                 {
-                    UserId = notificationDto.UserId, // Always valid user ID here
+                    UserId = notificationDto.UserId,
                     ParkingSessionId = notificationDto.ParkingSessionId,
                     EmailAddress = notificationDto.EmailAddress,
                     Subject = notificationDto.Subject,
@@ -73,7 +73,7 @@ namespace SmartParkingSystem.Services
                 Console.WriteLine($"DEBUG: Saving notification for registered user {notificationDto.UserId}");
                 var createdNotification = await _emailRepository.AddAsync(emailNotification);
 
-                // Send email immediately
+                
                 var emailSent = await SendEmailAsync(createdNotification);
 
                 createdNotification.Status = emailSent ? EmailStatus.Sent : EmailStatus.Failed;
@@ -92,70 +92,7 @@ namespace SmartParkingSystem.Services
             }
         }
 
-        //public async Task<EmailNotificationResponseDto> SendNotificationAsync(SendEmailNotificationDto notificationDto)
-        //{
-        //    try
-        //    {
-        //        // This method now only handles registered users
-        //        if (notificationDto.UserId <= 0)
-        //        {
-        //            throw new ArgumentException("SendNotificationAsync should only be called for registered users. Use SendGuestEmailAsync for guests.");
-        //        }
-
-        //        // Validate user exists
-        //        var user = await _userRepository.GetByIdAsync(notificationDto.UserId);
-        //        if (user == null)
-        //            throw new ArgumentException($"User with Id {notificationDto.UserId} not found.");
-
-        //        // Load full session if provided (check for null and > 0)
-        //        ParkingSession session = null;
-        //        if (notificationDto.ParkingSessionId.HasValue && notificationDto.ParkingSessionId.Value > 0)
-        //        {
-        //            session = await _sessionRepository.GetSessionWithDetailsAsync(notificationDto.ParkingSessionId.Value);
-        //            if (session == null)
-        //                throw new ArgumentException($"Parking session with Id {notificationDto.ParkingSessionId} not found.");
-        //        }
-
-        //        // Generate subject and message if session exists
-        //        if (session != null)
-        //        {
-        //            (notificationDto.Subject, notificationDto.Message) = GenerateEmailContent(session, notificationDto.NotificationType);
-        //        }
-
-        //        // Create email notification record (only for registered users)
-        //        var emailNotification = new EmailNotification
-        //        {
-        //            UserId = notificationDto.UserId,
-        //            ParkingSessionId = notificationDto.ParkingSessionId, // Now nullable
-        //            EmailAddress = notificationDto.EmailAddress,
-        //            Subject = notificationDto.Subject,
-        //            Message = notificationDto.Message,
-        //            NotificationType = notificationDto.NotificationType,
-        //            Status = EmailStatus.Pending,
-        //            CreatedAt = DateTime.UtcNow
-        //        };
-
-        //        Console.WriteLine($"DEBUG: Saving notification for registered user {notificationDto.UserId}");
-        //        var createdNotification = await _emailRepository.AddAsync(emailNotification);
-
-        //        // Send email immediately
-        //        var emailSent = await SendEmailAsync(createdNotification);
-
-        //        createdNotification.Status = emailSent ? EmailStatus.Sent : EmailStatus.Failed;
-        //        if (emailSent) createdNotification.SentAt = DateTime.UtcNow;
-
-        //        await _emailRepository.UpdateAsync(createdNotification);
-        //        return await MapToEmailNotificationResponseDto(createdNotification);
-        //    }
-        //    catch (ArgumentException)
-        //    {
-        //        throw;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("Error sending email notification.", ex);
-        //    }
-        //}
+    
 
         public async Task<bool> SendGuestEmailAsync(string guestEmail, string guestName, string subject, string message)
         {
@@ -197,6 +134,7 @@ namespace SmartParkingSystem.Services
                 return false;
             }
         }
+
         public async Task<IEnumerable<EmailNotificationResponseDto>> GetUserNotificationsAsync(int userId)
         {
             try
@@ -280,9 +218,7 @@ namespace SmartParkingSystem.Services
                 return false;
             }
         }
-        // Add these methods to your EmailNotificationService class
-
-        // Replace your SendWelcomeEmailAsync method with this debug version
+       
        
 
         private async Task<EmailNotificationResponseDto> MapToEmailNotificationResponseDto(EmailNotification notification)
@@ -290,7 +226,7 @@ namespace SmartParkingSystem.Services
             var dto = new EmailNotificationResponseDto
             {
                 Id = notification.Id,
-                UserId = notification.UserId ?? 0, // Handle nullable UserId
+                UserId = notification.UserId ?? 0, 
                 UserName = "",
                 ParkingSessionId = notification.ParkingSessionId,
                 EmailAddress = notification.EmailAddress,

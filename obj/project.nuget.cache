@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Ejz/CUyQ9g4=",
+  "dgSpecHash": "oW3KvAesSVs=",
   "success": true,
   "projectFilePath": "C:\\Users\\kiran\\Source\\Repos\\SmartParkingSystem\\SmartParkingSystem\\SmartParkingSystem.csproj",
   "expectedPackageFiles": [
@@ -9,7 +9,6 @@
     "C:\\Users\\kiran\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\kiran\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
     "C:\\Users\\kiran\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
-    "C:\\Users\\kiran\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",
     "C:\\Users\\kiran\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\kiran\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.19\\microsoft.aspnetcore.authentication.jwtbearer.8.0.19.nupkg.sha512",
     "C:\\Users\\kiran\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\7.0.0\\microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",
@@ -54,7 +53,6 @@
     "C:\\Users\\kiran\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "C:\\Users\\kiran\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\kiran\\.nuget\\packages\\mono.texttemplating\\3.0.0\\mono.texttemplating.3.0.0.nupkg.sha512",
-    "C:\\Users\\kiran\\.nuget\\packages\\moq\\4.20.72\\moq.4.20.72.nupkg.sha512",
     "C:\\Users\\kiran\\.nuget\\packages\\swashbuckle.aspnetcore\\6.6.2\\swashbuckle.aspnetcore.6.6.2.nupkg.sha512",
     "C:\\Users\\kiran\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.6.2\\swashbuckle.aspnetcore.swagger.6.6.2.nupkg.sha512",
     "C:\\Users\\kiran\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.6.2\\swashbuckle.aspnetcore.swaggergen.6.6.2.nupkg.sha512",
@@ -70,7 +68,6 @@
     "C:\\Users\\kiran\\.nuget\\packages\\system.composition.typedparts\\7.0.0\\system.composition.typedparts.7.0.0.nupkg.sha512",
     "C:\\Users\\kiran\\.nuget\\packages\\system.configuration.configurationmanager\\6.0.1\\system.configuration.configurationmanager.6.0.1.nupkg.sha512",
     "C:\\Users\\kiran\\.nuget\\packages\\system.diagnostics.diagnosticsource\\9.0.9\\system.diagnostics.diagnosticsource.9.0.9.nupkg.sha512",
-    "C:\\Users\\kiran\\.nuget\\packages\\system.diagnostics.eventlog\\6.0.0\\system.diagnostics.eventlog.6.0.0.nupkg.sha512",
     "C:\\Users\\kiran\\.nuget\\packages\\system.drawing.common\\6.0.0\\system.drawing.common.6.0.0.nupkg.sha512",
     "C:\\Users\\kiran\\.nuget\\packages\\system.formats.asn1\\9.0.9\\system.formats.asn1.9.0.9.nupkg.sha512",
     "C:\\Users\\kiran\\.nuget\\packages\\system.identitymodel.tokens.jwt\\8.14.0\\system.identitymodel.tokens.jwt.8.14.0.nupkg.sha512",
@@ -91,8 +88,7 @@
     "C:\\Users\\kiran\\.nuget\\packages\\system.text.json\\9.0.9\\system.text.json.9.0.9.nupkg.sha512",
     "C:\\Users\\kiran\\.nuget\\packages\\system.threading.channels\\7.0.0\\system.threading.channels.7.0.0.nupkg.sha512",
     "C:\\Users\\kiran\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
-    "C:\\Users\\kiran\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512",
-    "C:\\Users\\kiran\\.nuget\\packages\\xunit.runner.visualstudio\\3.1.4\\xunit.runner.visualstudio.3.1.4.nupkg.sha512"
+    "C:\\Users\\kiran\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512"
   ],
   "logs": []
 }

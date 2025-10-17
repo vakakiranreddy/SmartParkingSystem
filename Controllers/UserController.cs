@@ -81,7 +81,7 @@ namespace SmartParkingSystem.Controllers
                 var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
 
-                // Only allow users to update their own profile or admins to update any
+                
                 if (currentUserId != id && userRole != "Admin")
                 {
                     return Forbid();

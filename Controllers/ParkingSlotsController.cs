@@ -18,7 +18,7 @@ namespace SmartParkingSystem.Controllers
             _parkingSlotService = parkingSlotService;
         }
 
-        // ---------- CRUD ----------
+      
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
